@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const Footer = () => {
-  return <div>Footer!</div>;
-};
+  return <footer className="text-center">&copy; Jon Preece Development Ltd, 2018.</footer>
+}
 
-export default Footer;
+export default Footer
