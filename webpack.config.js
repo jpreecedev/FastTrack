@@ -1,6 +1,8 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   devtool: 'source-map',
@@ -72,6 +74,8 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
-    })
+    }),
+    new CleanWebpackPlugin(['dist']),
+    new CopyWebpackPlugin([{ from: './public' }])
   ]
 }
