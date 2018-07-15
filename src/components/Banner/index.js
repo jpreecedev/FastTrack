@@ -9,12 +9,7 @@ const Banner = () => (
     className={classnames('rounded-0', 'mb-3', 'text-center', styles.background)}
   >
     <div className="d-inline-flex">
-      <img
-        src="/assets/icon/android-icon-48x48.png"
-        alt="Fast Track"
-        width={48}
-        height={48}
-      />
+      <img src="/assets/icon.png" alt="Fast Track" width={48} height={48} />
       <h1
         className={classnames(
           'display-4',

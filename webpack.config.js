@@ -4,11 +4,12 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const { GenerateSW } = require('workbox-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 const OUTPUT_PATH = path.resolve('./dist')
 
-module.exports = {
-  devtool: 'source-map',
+module.exports = (env, argv) => ({
+  devtool: argv.mode === 'development' ? 'source-map' : '',
   devServer: {
     port: 3100,
     historyApiFallback: {
@@ -85,6 +86,19 @@ module.exports = {
     new CopyWebpackPlugin([{ from: './public' }]),
     new GenerateSW({
       swDest: path.join(OUTPUT_PATH, 'sw.js')
+    }),
+    new WebpackPwaManifest({
+      name: 'Fast Track',
+      short_name: 'fasttrack',
+      description: 'Track your fasting activity over time',
+      background_color: '#c33764',
+      theme_color: '#c33764',
+      icons: [
+        {
+          src: path.resolve('./public/assets/icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512]
+        }
+      ]
     })
   ]
-}
+})
