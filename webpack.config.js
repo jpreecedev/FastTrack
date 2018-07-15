@@ -3,6 +3,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { GenerateSW } = require('workbox-webpack-plugin')
+
+const OUTPUT_PATH = path.resolve('./dist')
 
 module.exports = {
   devtool: 'source-map',
@@ -66,6 +69,9 @@ module.exports = {
       components: path.resolve(__dirname, './src/components/')
     }
   },
+  output: {
+    path: path.resolve(__dirname, './dist')
+  },
   plugins: [
     new HtmlWebPackPlugin({
       template: './src/index.html',
@@ -76,6 +82,9 @@ module.exports = {
       chunkFilename: '[id].css'
     }),
     new CleanWebpackPlugin(['dist']),
-    new CopyWebpackPlugin([{ from: './public' }])
+    new CopyWebpackPlugin([{ from: './public' }]),
+    new GenerateSW({
+      swDest: path.join(OUTPUT_PATH, 'sw.js')
+    })
   ]
 }
