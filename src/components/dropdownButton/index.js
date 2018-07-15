@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 
-class DropdownButton extends React.Component {
+class DropdownButton extends Component {
   constructor(props) {
     super(props)
 

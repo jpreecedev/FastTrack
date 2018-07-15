@@ -5,7 +5,7 @@ const path = require('path')
 module.exports = {
   devtool: 'source-map',
   devServer: {
-    port: 3000,
+    port: 3100,
     historyApiFallback: {
       index: 'index.html'
     }
