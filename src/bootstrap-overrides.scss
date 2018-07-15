@@ -1,0 +1,14 @@
+:global {
+  .btn-primary {
+    background-color: rgb(195, 55, 100);
+    border-color: rgb(195, 55, 100);
+
+    &:not(:disabled):not(:disabled) {
+      &:hover,
+      &:active {
+        background-color: rgb(29, 38, 113);
+        border-color: rgb(29, 38, 113);
+      }
+    }
+  }
+}
