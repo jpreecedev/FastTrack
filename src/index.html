@@ -18,7 +18,18 @@
   </noscript>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        registration.pushManager.getSubscription()
+          .then(function (subscription) {
+            var isSubscribed = !(subscription === null);
+
+            if (isSubscribed) {
+              console.log('User IS subscribed.');
+            } else {
+              console.log('User is NOT subscribed.');
+            }
+          });
+      })
     }
   </script>
 </body>

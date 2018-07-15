@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const { GenerateSW } = require('workbox-webpack-plugin')
+const { InjectManifest } = require('workbox-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 const OUTPUT_PATH = path.resolve('./dist')
@@ -84,7 +84,8 @@ module.exports = (env, argv) => ({
     }),
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([{ from: './public' }]),
-    new GenerateSW({
+    new InjectManifest({
+      swSrc: './src/sw.js',
       swDest: path.join(OUTPUT_PATH, 'sw.js')
     }),
     new WebpackPwaManifest({
