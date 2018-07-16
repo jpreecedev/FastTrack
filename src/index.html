@@ -16,17 +16,74 @@
   <noscript>
     You really need JavaScript to view this site!
   </noscript>
+  <div class="js-subscription-json"></div>
+  <div class="js-subscription-details"></div>
   <script>
+
+    var swRegistration;
+
+    function urlB64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
+
+    function updateSubscriptionOnServer(subscription) {
+      // TODO: Send subscription to application server
+
+      const subscriptionJson = document.querySelector('.js-subscription-json');
+      const subscriptionDetails =
+        document.querySelector('.js-subscription-details');
+
+      if (subscription) {
+        debugger
+        subscriptionJson.textContent = JSON.stringify(subscription);
+        subscriptionDetails.classList.remove('is-invisible');
+      } else {
+        subscriptionDetails.classList.add('is-invisible');
+      }
+    }
+
+    function subscribeUser() {
+      const applicationServerKey = urlB64ToUint8Array('BCiCaB59_Pxmhv6acmNxOOOkywdu9t20SMVgAmyMzv2T7t9F6-GIUE1_PjrsTWz8Bb6cfNpMnVEAn1zzJHMoqtk');
+      swRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: applicationServerKey
+      })
+        .then(function (subscription) {
+          console.log('User is subscribed.');
+
+          updateSubscriptionOnServer(subscription);
+
+          isSubscribed = true;
+        })
+        .catch(function (err) {
+          console.log('Failed to subscribe the user: ', err);
+        });
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        swRegistration = registration;
         registration.pushManager.getSubscription()
           .then(function (subscription) {
             var isSubscribed = !(subscription === null);
 
             if (isSubscribed) {
               console.log('User IS subscribed.');
+              updateSubscriptionOnServer(subscription);
             } else {
               console.log('User is NOT subscribed.');
+              subscribeUser()
             }
           });
       })

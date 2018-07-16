@@ -12,6 +12,7 @@ module.exports = (env, argv) => ({
   devtool: argv.mode === 'development' ? 'source-map' : '',
   devServer: {
     port: 3100,
+    https: true,
     historyApiFallback: {
       index: 'index.html'
     }
@@ -58,7 +59,7 @@ module.exports = (env, argv) => ({
         use: [
           {
             loader: 'html-loader',
-            options: { minimize: true }
+            options: { minimize: argv.mode !== 'development' }
           }
         ]
       }
