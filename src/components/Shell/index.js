@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import dayjs from 'dayjs'
+import moment from 'moment-es6'
 
 import { FastingContext } from '../../context/fasting-context'
+import { startFast, stopFast, getFastingHistory } from '../../database'
 
 import Banner from '../Banner'
 import Footer from '../Footer'
@@ -14,7 +15,40 @@ class Shell extends Component {
       hasStarted: false,
       toggleStarted: this.toggleStarted,
       started: null,
-      current: null
+      current: null,
+      dataset: {
+        labels: [],
+        data: []
+      }
+    }
+  }
+
+  componentDidMount = async () => {
+    var data = await getFastingHistory()
+    var mapped = data.map(function(item) {
+      var started = moment(item.started)
+      var stopped = item.stopped ? moment(item.stopped) : moment()
+      var duration = moment.duration(stopped.diff(started))
+      return {
+        label: started.format('Do MMM'),
+        duration: duration.asMinutes()
+      }
+    })
+
+    if (mapped.length) {
+      this.setState({
+        dataset: {
+          labels: [...mapped.map(x => x.label)],
+          data: [...mapped.map(x => x.duration)]
+        }
+      })
+    } else {
+      this.setState({
+        dataset: {
+          labels: [],
+          data: []
+        }
+      })
     }
   }
 
@@ -28,23 +62,33 @@ class Shell extends Component {
   }
 
   start = () => {
-    this.setState(
-      {
-        hasStarted: true,
-        started: dayjs(),
-        current: dayjs()
-      },
-      this.startTimer
-    )
+    var now = moment()
+    var label = now.format('Do MMM')
+    var duration = 0
+
+    var newState = {
+      hasStarted: true,
+      started: now,
+      current: now,
+      dataset: {
+        labels: [...this.state.dataset.labels, label],
+        data: [...this.state.dataset.data, duration]
+      }
+    }
+
+    this.setState(newState, async () => {
+      this.startTimer()
+      await startFast(this.state.started)
+    })
   }
 
   startTimer = () => {
     const handle = setInterval(() => {
       this.setState({
-        current: dayjs(),
+        current: moment(),
         handle
       })
-    }, 1000)
+    }, 5000)
   }
 
   stop = () => {
@@ -52,10 +96,13 @@ class Shell extends Component {
       {
         hasStarted: false,
         started: null,
-        stopped: dayjs(),
+        stopped: moment(),
         current: null
       },
-      this.stopTimer
+      async () => {
+        this.stopTimer()
+        await stopFast(this.state.stopped)
+      }
     )
   }
 

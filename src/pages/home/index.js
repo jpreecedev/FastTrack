@@ -1,19 +1,20 @@
 import React, { Fragment } from 'react'
 
+import { FastingContext } from '../../context/fasting-context'
+
 import Chart from '../../components/Chart'
 import Duration from '../../components/Duration'
 import Trigger from '../../components/Trigger'
-
-const dataset = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  data: [65, 59, 80, 81, 56, 55, 40]
-}
 
 const Home = () => (
   <Fragment>
     <Duration />
     <Trigger />
-    <Chart dataset={dataset} />
+    <FastingContext.Consumer>
+      {({ dataset }) => {
+        return dataset.labels.length > 0 && <Chart dataset={dataset} />
+      }}
+    </FastingContext.Consumer>
   </Fragment>
 )
 

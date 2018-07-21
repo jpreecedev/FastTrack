@@ -1,12 +1,12 @@
 import React from 'react'
-import dayjs from 'dayjs'
+import moment from 'moment-es6'
 
 import { FastingContext } from '../../context/fasting-context'
 
 const startedDisplay = (started, current) => (
   <div className="text-center">
     <p className="lead mb-0">You started fasting</p>
-    <h2>{dayjs(started).from(current)}</h2>
+    <h2>{moment(started).from(current)}</h2>
   </div>
 )
 
