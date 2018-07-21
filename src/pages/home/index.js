@@ -11,9 +11,7 @@ const Home = () => (
     <Duration />
     <Trigger />
     <FastingContext.Consumer>
-      {({ dataset }) => {
-        return dataset.labels.length > 0 && <Chart dataset={dataset} />
-      }}
+      {({ dataset }) => <Chart dataset={dataset} />}
     </FastingContext.Consumer>
   </Fragment>
 )
