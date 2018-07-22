@@ -67,16 +67,17 @@ class Shell extends Component {
   }
 
   startTimer = () => {
-    const handle = setInterval(() => {
-      this.setState(
-        {
-          current: moment(),
-          handle
-        },
-        () => {
-          updateFast(this.state.started)
-        }
+    const handle = setInterval(async () => {
+      var dataset = toChartDataFormat(
+        await updateFast(this.state.started),
+        this.state.dataset
       )
+
+      this.setState({
+        current: moment(),
+        handle,
+        dataset
+      })
     }, 5000)
   }
 

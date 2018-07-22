@@ -45,8 +45,12 @@ export function toChartDataFormat(fastingData, dataset) {
   var existingLabel = dataset.data.find(x => x.label === fastingData.label)
   if (!existingLabel) {
     dataset.labels.push(fastingData.label)
+    dataset.data.push(fastingData)
+  } else {
+    existingLabel.duration = fastingData.duration
+    existingLabel.started = fastingData.started
+    existingLabel.stopped = fastingData.stopped
   }
-  dataset.data.push(fastingData)
   return dataset
 }
 
