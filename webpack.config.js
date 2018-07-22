@@ -11,7 +11,7 @@ const OUTPUT_PATH = path.resolve('./dist')
 module.exports = (env, argv) => ({
   devtool: argv.mode === 'development' ? 'source-map' : '',
   devServer: {
-    port: 3100,
+    port: 3200,
     https: true,
     historyApiFallback: {
       index: 'index.html'
@@ -91,10 +91,11 @@ module.exports = (env, argv) => ({
     }),
     new WebpackPwaManifest({
       name: 'Fast Track',
-      short_name: 'fasttrack',
+      short_name: 'Fast Track',
       description: 'Track your fasting activity over time',
       background_color: '#c33764',
       theme_color: '#c33764',
+      start_url: '.',
       icons: [
         {
           src: path.resolve('./public/assets/icon.png'),

@@ -14,11 +14,25 @@
 
   </div>
   <noscript>
-    You really need JavaScript to view this site!
+    <div class="rounded-0 mb-3 text-center styles__background___ZMu3- jumbotron">
+      <div class="d-inline-flex">
+        <img src="/assets/icon.png" alt="Fast Track" width="48" height="48">
+        <h1 class="display-4 align-self-center ml-2 mr-2 mb-0 styles__heading___2W9q6">Fast Track</h1>
+      </div>
+      <p class="lead mb-0">Track your fasting activity over time</p>
+    </div>
+    <main class="pl-3 pr-3">
+      <p class="lead text-center">We're very sorry, but we can't continue until you enable JavaScript.</p>
+      <p class="lead text-center">Please enable JavaScript and then refresh the page.</p>
+      <footer class="text-center mt-3 mb-3 styles__footer___1ubrj">© Jon Preece Development Ltd, 2018.</footer>
+    </main>
   </noscript>
+
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('/sw.js', {
+        scope: '.'
+      })
     }
   </script>
 </body>

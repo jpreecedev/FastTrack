@@ -12,6 +12,11 @@
     "browser": true
   },
   "extends": ["standard", "standard-react", "prettier"],
+  "globals": {
+    "workbox": true,
+    "__precacheManifest": true,
+    "DefaultRouter": true
+  },
   "rules": {
     "react/prop-types": false
   }
