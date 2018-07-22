@@ -12,7 +12,7 @@ module.exports = {
       key: '~/.ssh/fast-track.pem',
       ref: 'origin/master',
       repo: 'git@github.com:jpreecedev/FastTrack.git',
-      path: '/home/ubuntu/server',
+      path: '/home/ubuntu/server/source',
       'post-deploy':
         'npm install && npm run build && pm2 startOrRestart ecosystem.config.js'
     }
