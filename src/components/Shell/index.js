@@ -28,29 +28,34 @@ class Shell extends Component {
   }
 
   componentDidMount = async () => {
-    var fastingData = await getFastingHistory()
+    var fastingDataset = await getFastingHistory()
+    var last = fastingDataset.data.pop()
 
-    this.setState({
-      dataset: fastingData
-    })
+    if (last && !last.stopped) {
+      this.toggleStarted(moment(last.started))
+    } else {
+      this.setState({
+        dataset: fastingDataset
+      })
+    }
   }
 
-  toggleStarted = () => {
+  toggleStarted = when => {
     const { started } = this.state
     if (started) {
       this.stop()
     } else {
-      this.start()
+      this.start(when)
     }
   }
 
-  start = async () => {
-    var now = moment()
+  start = async when => {
+    var now = when || moment()
 
     var newState = {
       hasStarted: true,
       started: now,
-      current: now
+      current: moment()
     }
 
     var dataset = toChartDataFormat(await startFast(now), this.state.dataset)

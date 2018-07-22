@@ -70,7 +70,7 @@ export async function getFastingHistory() {
 export async function startFast(started) {
   return new Promise(async function(resolve, reject) {
     try {
-      var dataExists = await exists(StoreName, started.format(DefaultDisplayDateFormat))
+      var dataExists = await exists(StoreName, started.format())
       var formatted = moment(started).format()
       var newData = {
         started: formatted,

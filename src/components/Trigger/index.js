@@ -7,7 +7,7 @@ const Trigger = () => (
   <FastingContext.Consumer>
     {({ hasStarted, toggleStarted }) => (
       <div className="d-flex justify-content-center mb-4">
-        <Button onClick={toggleStarted} color="primary" size="lg">
+        <Button onClick={() => toggleStarted()} color="primary" size="lg">
           {hasStarted ? 'Stop fasting' : 'Start a new fast!'}
         </Button>
       </div>
