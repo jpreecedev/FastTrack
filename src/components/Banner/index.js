@@ -2,7 +2,7 @@ import React from 'react'
 import { Jumbotron } from 'reactstrap'
 
 import classnames from 'classnames'
-import styles from './styles'
+import styles from './styles.scss'
 
 const Banner = () => (
   <Jumbotron

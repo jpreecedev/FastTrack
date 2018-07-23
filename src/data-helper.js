@@ -1,15 +1,8 @@
 import moment from 'moment-es6'
-import {
-  getAll,
-  getLast,
-  addRecord,
-  exists,
-  update,
-  waitForBootComplete
-} from './database'
+import { getAll, getLast, addRecord, exists, update } from './database'
 
-export const DatabaseName = 'fastingHistory'
-export const StoreName = 'fastingHistory'
+export const DatabaseName = 'fast_track'
+export const StoreName = 'fast_track'
 
 export const DefaultDataStructure = {
   labels: [],
@@ -56,8 +49,6 @@ export function toChartDataFormat(fastingData, dataset) {
 
 export async function getFastingHistory() {
   return new Promise(async function(resolve, reject) {
-    await waitForBootComplete()
-
     try {
       var result = parseExistingDataStructure(await getAll(StoreName))
       resolve(result)
