@@ -41,8 +41,6 @@ export function initializeDatabase() {
       alert('Database error: ' + event.target.errorCode)
     }
 
-    console.log('making false')
-
     isBooting = false
   }
 
