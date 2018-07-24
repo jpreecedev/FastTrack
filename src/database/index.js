@@ -35,6 +35,13 @@ function parseExistingDataStructure(fastingData) {
 }
 
 export function toChartDataFormat(fastingData, dataset) {
+  if (!fastingData) {
+    return dataset
+  }
+  if (!dataset) {
+    throw new Error('Dataset is required')
+  }
+
   var existingLabel = dataset.data.find(x => x.label === fastingData.label)
   if (!existingLabel) {
     dataset.labels.push(fastingData.label)

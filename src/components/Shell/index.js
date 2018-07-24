@@ -9,7 +9,7 @@ import {
   startFast,
   stopFast,
   updateFast
-} from '../../data-helper'
+} from '../../database'
 
 import Banner from '../Banner'
 import Footer from '../Footer'

@@ -1,4 +1,4 @@
-import { DatabaseName, StoreName } from './data-helper'
+import { DatabaseName, StoreName } from './index'
 
 var db
 var isBooting = true
@@ -40,6 +40,8 @@ export function initializeDatabase() {
     db.onerror = function(event) {
       alert('Database error: ' + event.target.errorCode)
     }
+
+    console.log('making false')
 
     isBooting = false
   }
