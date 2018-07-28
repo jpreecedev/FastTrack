@@ -11,20 +11,18 @@ import {
   updateFast
 } from '../../database'
 
+import Loading from '../Loading'
 import Banner from '../Banner'
 import Footer from '../Footer'
 
 class Shell extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      hasStarted: false,
-      toggleStarted: this.toggleStarted,
-      started: null,
-      current: null,
-      dataset: DefaultDataStructure
-    }
+  state = {
+    hasStarted: false,
+    toggleStarted: this.toggleStarted,
+    started: null,
+    current: null,
+    dataset: DefaultDataStructure,
+    loading: true
   }
 
   componentDidMount = async () => {
@@ -35,7 +33,8 @@ class Shell extends Component {
       this.toggleStarted(moment(last.started))
     } else {
       this.setState({
-        dataset: fastingDataset
+        dataset: fastingDataset,
+        loading: false
       })
     }
   }
@@ -106,17 +105,15 @@ class Shell extends Component {
     clearInterval(handle)
   }
 
-  render() {
-    return (
-      <FastingContext.Provider value={this.state}>
-        <Banner />
-        <main className="pl-3 pr-3">
-          {this.props.children}
-          <Footer />
-        </main>
-      </FastingContext.Provider>
-    )
-  }
+  render = () => (
+    <FastingContext.Provider value={this.state}>
+      <Banner />
+      <main className="pl-3 pr-3">
+        {this.state.loading ? <Loading /> : this.props.children}
+        <Footer />
+      </main>
+    </FastingContext.Provider>
+  )
 }
 
 export default Shell
