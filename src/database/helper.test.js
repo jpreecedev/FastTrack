@@ -1,5 +1,13 @@
 import moment from 'moment-es6'
-import { StorageKey, initializeDatabase, add, update, exists } from './helper'
+import {
+  StorageKey,
+  initializeDatabase,
+  add,
+  update,
+  exists,
+  getLast,
+  getAll
+} from './helper'
 
 function getFromLocalStorage() {
   return JSON.parse(localStorage.getItem(StorageKey))
@@ -100,5 +108,94 @@ describe('Helper tests', function() {
         { started: secondStarted, stopped: secondStopped }
       ]
     })
+  })
+
+  it('should return an empty object when there are no records in the database when calling getLast', function() {
+    var result = getLast()
+
+    expect(result).toEqual({})
+  })
+
+  it('should return the last object in the record set', function() {
+    var started = moment().format()
+    var expectedResult = {
+      started
+    }
+
+    add(started)
+
+    var result = getLast()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should return the last object in the record set when there are multiple entries', function() {
+    var started = moment().format()
+    var expectedResult = {
+      started
+    }
+
+    add({
+      started: moment().format(),
+      stopped: moment()
+        .add(1, 'year')
+        .format()
+    })
+    add(started)
+
+    var result = getLast()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should return an empty record set when there is no fasting history', function() {
+    var expectedResult = {
+      records: []
+    }
+
+    var result = getAll()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should return one record for fasting history', function() {
+    var started = moment().format()
+    var expectedResult = {
+      records: [
+        {
+          started
+        }
+      ]
+    }
+
+    add(started)
+
+    var result = getAll()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should return two records for fasting history', function() {
+    var started = moment().format()
+    var secondStarted = moment()
+      .add(1, 'years')
+      .format()
+    var expectedResult = {
+      records: [
+        {
+          started
+        },
+        {
+          started: secondStarted
+        }
+      ]
+    }
+
+    add(started)
+    add(secondStarted)
+
+    var result = getAll()
+
+    expect(result).toEqual(expectedResult)
   })
 })

@@ -39,3 +39,15 @@ export function exists(started) {
     return x.started === started
   })
 }
+
+export function getLast() {
+  var data = JSON.parse(localStorage.getItem(StorageKey))
+  if (data.records.length) {
+    return data.records[data.records.length - 1]
+  }
+  return {}
+}
+
+export function getAll() {
+  return JSON.parse(localStorage.getItem(StorageKey))
+}
