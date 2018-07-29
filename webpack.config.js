@@ -11,6 +11,7 @@ const OUTPUT_PATH = path.resolve('./dist')
 module.exports = (env, argv) => ({
   devtool: argv.mode === 'development' ? 'source-map' : '',
   devServer: {
+    https: true,
     historyApiFallback: {
       index: 'index.html'
     }

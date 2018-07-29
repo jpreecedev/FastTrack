@@ -55,7 +55,7 @@ var getDataWithDefaultStyling = function getDataWithDefaultStyling(dataset) {
         borderWidth: 1,
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
-        data: dataset.data.map(x => {
+        data: dataset.records.map(x => {
           var rounded = Math.round((x.duration / 60) * 100) / 100
           if (rounded >= 1) {
             return rounded
@@ -69,7 +69,7 @@ var getDataWithDefaultStyling = function getDataWithDefaultStyling(dataset) {
 }
 
 const Chart = ({ dataset, max = 5 * 24 }) => {
-  if (dataset.data.length === 0) {
+  if (dataset.records.length === 0) {
     return null
   }
 

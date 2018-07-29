@@ -3,12 +3,11 @@ import moment from 'moment-es6'
 
 import { FastingContext } from '../../context/fasting-context'
 import {
-  DefaultDataStructure,
-  getFastingHistory,
-  toChartDataFormat,
+  getHistory,
+  getLastRecord,
+  isFastInProgress,
   startFast,
-  stopFast,
-  updateFast
+  stopFast
 } from '../../database'
 
 import Loading from '../Loading'
@@ -16,93 +15,88 @@ import Banner from '../Banner'
 import Footer from '../Footer'
 
 class Shell extends Component {
-  state = {
-    hasStarted: false,
-    toggleStarted: this.toggleStarted,
-    started: null,
-    current: null,
-    dataset: DefaultDataStructure,
-    loading: true
-  }
-
-  componentDidMount = async () => {
-    var fastingDataset = await getFastingHistory()
-    var last = fastingDataset.data.pop()
-
-    if (last && !last.stopped) {
-      this.toggleStarted(moment(last.started))
-    } else {
-      this.setState({
-        dataset: fastingDataset,
-        loading: false
-      })
+  constructor(props) {
+    super(props)
+    this.intervalHandle = null
+    this.state = {
+      hasStarted: false,
+      start: this.start,
+      stop: this.stop,
+      started: null,
+      current: null,
+      dataset: null,
+      loading: true
     }
   }
 
-  toggleStarted = when => {
-    const { started } = this.state
-    if (started) {
-      this.stop()
-    } else {
-      this.start(when)
-    }
-  }
-
-  start = async when => {
-    var now = when || moment()
-
-    var newState = {
-      hasStarted: true,
-      started: now,
-      current: moment()
-    }
-
-    var dataset = toChartDataFormat(await startFast(now), this.state.dataset)
+  componentDidMount = () => {
+    var lastRecord = getLastRecord()
+    var hasStarted = isFastInProgress()
+    var started = hasStarted ? lastRecord.started : null
 
     this.setState(
       {
-        ...newState,
-        dataset
+        hasStarted,
+        started,
+        dataset: getHistory(),
+        current: moment(),
+        loading: false
       },
       () => {
-        this.startTimer()
+        if (hasStarted) {
+          this.startTimer(started)
+        }
       }
     )
   }
 
-  startTimer = () => {
-    const handle = setInterval(async () => {
-      var dataset = toChartDataFormat(
-        await updateFast(this.state.started),
-        this.state.dataset
-      )
-
-      this.setState({
-        current: moment(),
-        handle,
-        dataset
-      })
-    }, 5000)
+  start = () => {
+    var started = moment()
+    this.setState(
+      {
+        hasStarted: true,
+        started,
+        current: started
+      },
+      () => {
+        startFast(started)
+        this.startTimer(started)
+      }
+    )
   }
 
   stop = () => {
+    var stopped = moment()
     this.setState(
       {
         hasStarted: false,
         started: null,
-        stopped: moment(),
         current: null
       },
-      async () => {
+      () => {
+        stopFast(stopped)
         this.stopTimer()
-        await stopFast(this.state.stopped)
       }
     )
   }
 
+  startTimer = started => {
+    this.intervalHandle = setInterval(() => {
+      this.setState({
+        started,
+        current: moment(),
+        hasStarted: true
+      })
+    }, 5000)
+  }
+
   stopTimer = () => {
-    const { handle } = this.state
-    clearInterval(handle)
+    clearInterval(this.intervalHandle)
+    this.setState({
+      started: null,
+      current: null,
+      hasStarted: false
+    })
   }
 
   render = () => (

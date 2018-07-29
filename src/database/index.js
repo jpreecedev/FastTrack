@@ -4,12 +4,7 @@ import { update, add, getLast, getAll } from './helper'
 export const DefaultDisplayDateFormat = 'Do MMM'
 
 export function startFast(started) {
-  var formatted = moment(started).format()
-  var newData = {
-    started: formatted
-  }
-
-  add(newData)
+  add(moment(started).format())
 }
 
 export function getFastDuration(started, stopped) {
@@ -28,6 +23,25 @@ export async function stopFast(stopped) {
   update(last.started, updated)
 }
 
+export function isFastInProgress() {
+  var lastRecord = getLast()
+  var hasStarted = lastRecord.hasOwnProperty('started')
+  var hasStopped = lastRecord.hasOwnProperty('stopped')
+
+  return hasStarted && !hasStopped
+}
+
+export function hasFastStopped(record) {
+  var hasStarted = record.hasOwnProperty('started')
+  var hasStopped = record.hasOwnProperty('stopped')
+
+  return hasStarted && hasStopped
+}
+
 export function getHistory() {
   return getAll()
+}
+
+export function getLastRecord() {
+  return getLast()
 }

@@ -1,6 +1,14 @@
 import moment from 'moment-es6'
 
-import { startFast, stopFast, getFastDuration, getHistory } from './index'
+import {
+  startFast,
+  stopFast,
+  getFastDuration,
+  getHistory,
+  getLastRecord,
+  isFastInProgress,
+  hasFastStopped
+} from './index'
 import { add, update, getLast, getAll } from './helper'
 
 jest.mock('./helper')
@@ -15,14 +23,11 @@ describe('Database tests', function() {
 
   it('should add the new fast to the database', function() {
     var started = moment().format()
-    var result = {
-      started
-    }
 
     startFast(started)
 
     expect(add).toHaveBeenCalledTimes(1)
-    expect(add).toHaveBeenCalledWith(result)
+    expect(add).toHaveBeenCalledWith(started)
   })
 
   it('should result in a fast of 3 minutes when stopped is not supplied', function() {
@@ -127,6 +132,85 @@ describe('Database tests', function() {
     })
 
     var result = getHistory()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should return an empty record when there are no records when calling getLast', function() {
+    var expectedResult = {}
+
+    getLast.mockImplementation(function() {
+      return expectedResult
+    })
+
+    var result = getLastRecord()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should return the last record when there is only one record', function() {
+    var started = moment().format()
+    var expectedResult = {
+      started
+    }
+
+    getLast.mockImplementation(function() {
+      return expectedResult
+    })
+
+    var result = getLastRecord()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('fast should not be in progress when record set is empty', function() {
+    var expectedResult = false
+
+    getLast.mockImplementation(function() {
+      return {}
+    })
+
+    var result = isFastInProgress()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('fast should be in progress when single record is started', function() {
+    var expectedResult = true
+    var data = {
+      started: moment().format()
+    }
+
+    getLast.mockImplementation(function() {
+      return data
+    })
+
+    var result = isFastInProgress()
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should correctly identify that the fast has stopped', function() {
+    var expectedResult = true
+    var data = {
+      started: moment().format(),
+      stopped: moment()
+        .add(1, 'year')
+        .format()
+    }
+
+    var result = hasFastStopped(data)
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  it('should correctly identify that the fast has not stopped', function() {
+    var expectedResult = false
+    var data = {
+      started: moment().format()
+    }
+
+    var result = hasFastStopped(data)
 
     expect(result).toEqual(expectedResult)
   })
