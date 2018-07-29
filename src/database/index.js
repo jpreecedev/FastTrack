@@ -12,7 +12,7 @@ export function getFastDuration(started, stopped) {
   return Math.round(moment.duration(stopped.diff(started)).asMinutes())
 }
 
-export async function stopFast(stopped) {
+export function stopFast(stopped) {
   var last = getLast()
   var updated = {
     ...last,
