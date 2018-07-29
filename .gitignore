@@ -263,3 +263,4 @@ wwwroot/uploads
 wwwroot/static/uploads
 
 coverage
+localStorageTemp

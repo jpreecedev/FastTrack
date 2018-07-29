@@ -8,7 +8,7 @@ export function startFast(started) {
 }
 
 export function getFastDuration(started, stopped) {
-  stopped = stopped || moment()
+  stopped = stopped ? moment(stopped) : moment()
   return Math.round(moment.duration(stopped.diff(started)).asMinutes())
 }
 
